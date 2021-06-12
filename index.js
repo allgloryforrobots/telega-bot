@@ -51,20 +51,18 @@ bot.on('message', async msg => {
 
             try {
                 const red = await Adv.findOne({ isRed: true })
-                // .sort({ date: -1 })
 
                 if (red !== null)  await bot.sendMessage(chatId, red.text)
             } catch (e) {
-                errorHandler(chatId, e, 1)
+                // errorHandler(chatId, e, 1)
             }
             
             try {
                 const other = await Adv.find({ isRed: false })
-                // .sort({ date: -1 })
                 const html = other.map((adv, i) => `<b>${i+1}</b> ${adv.text}`).join('\n\n')
                 if (other !== null) await bot.sendMessage(chatId, html, {parse_mode : "HTML"})
             } catch (e) {
-                errorHandler(chatId, e, 2)
+                // errorHandler(chatId, e, 2)
             }
             return
 
@@ -105,12 +103,12 @@ bot.on('callback_query', async msg => {
         try {
             await Adv.updateMany({"isRed": true}, {"$set":{"isRed": false, "redDate": null}})
         } catch (e) {
-            errorHandler(data.chatId, e, 4)
+            return errorHandler(data.chatId, e, 4)
         }
 
         try {
             await Adv.findOneAndUpdate({"chatId": data.chatId}, {"$set":{"isRed": true, "redDate": Date.now()}}).sort( {date: -1} )
-            await bot.sendMessage(data.chatId, `Объявление теперь в самом верху списка`)
+            await bot.sendMessage(data.chatId, `Объявление будет закреплено вверху списка до тех пор, пока другой пользователь не даст красную цену`)
         } catch (e) {
             errorHandler(data.chatId, e, 5)
         }

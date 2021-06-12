@@ -9,12 +9,10 @@ mongoose.set('useFindAndModify', false)
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true  })
   .then(() => {
       console.log('MongoDB connected')
-      bot.sendMessage(chatId, `База данных подключилась, теперь можно загружатьработать с ботом`)
     })
   .catch(error => {
       console.log(error)
-      bot.sendMessage(chatId, `База данных не подключилась...`)
-    }  )
+    })
 
 const token = process.env.TOKEN
 const bot = new TelegramApi(token, {polling: true})

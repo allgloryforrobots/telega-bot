@@ -7,8 +7,14 @@ const Adv = require('./models/Adv')
 mongoose.set('useFindAndModify', false)
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true  })
-  .then(() => console.log('MongoDB connected'))
-  .catch(error => console.log(error))
+  .then(() => {
+      console.log('MongoDB connected')
+      bot.sendMessage(chatId, `База данных подключилась, теперь можно загружатьработать с ботом`)
+    })
+  .catch(error => {
+      console.log(error)
+      bot.sendMessage(chatId, `База данных не подключилась...`)
+    }  )
 
 const token = process.env.TOKEN
 const bot = new TelegramApi(token, {polling: true})
@@ -43,7 +49,7 @@ bot.on('message', async msg => {
 
     if (text === '/start') {
         await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/c62/4a8/c624a88d-1fe3-403a-b41a-3cdb9bf05b8a/192/30.webp')
-        bot.sendMessage(chatId, `Добро пожаловать в мой телеграм бот!`)
+        bot.sendMessage(chatId, `Добро пожаловать в мой телеграм бот! Надо подождать, пока подключиться база данных!`)
         return bot.sendMessage(chatId, `Напиши текст объявления, которое хочешь разместить \nНапиши /adv, чтобы увидеть все объявления`)
     }
 
